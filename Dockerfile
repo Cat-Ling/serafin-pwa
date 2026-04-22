@@ -31,7 +31,8 @@ COPY --from=builder /app/server.js ./
 COPY --from=builder /app/package*.json ./
 
 # Install only production dependencies
-RUN npm install --omit=dev
+# --ignore-scripts prevents triggering "svelte-kit sync" which requires devDependencies
+RUN npm install --omit=dev --ignore-scripts
 
 # Expose the default port
 EXPOSE 3000
