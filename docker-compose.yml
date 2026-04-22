@@ -1,0 +1,12 @@
+services:
+  serafin:
+    image: ghcr.io/cat-ling/serafin-pwa:latest
+    container_name: serafin
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    environment:
+      - PORT=3000
+      - NODE_ENV=production
+    labels:
+      - "com.centurylinklabs.watchtower.enable=true" # For automatic updates if using Watchtower
