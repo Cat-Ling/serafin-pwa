@@ -19,6 +19,8 @@
 		rescanDirectory,
 	} from '$lib/library/scan-actions/directories.ts'
 	import type { Directory } from '$lib/library/types.ts'
+	import { useJellyfinSyncService } from '$lib/library/jellyfin-sync.svelte.ts'
+	import { useJellyfinStore } from '$lib/stores/jellyfin.svelte.ts'
 	import type { DirectoryWithCount } from '../+page.ts'
 
 	interface Props {
@@ -35,6 +37,8 @@
 
 	const isAndroidPlatform = isAndroid()
 	let reparentDirectory = $state<ReparentDirectory | null>(null)
+	const jellyfinSync = useJellyfinSyncService()
+	const jellyfinStore = useJellyfinStore()
 
 	const addNewDirectoryHandler = async () => {
 		const directory = await showDirectoryPicker({
@@ -43,7 +47,7 @@
 
 		let childDirectories: Directory[] = []
 		for (const existingDir of directories) {
-			if (existingDir.legacy) {
+			if ('legacy' in existingDir || 'jellyfin' in existingDir) {
 				continue
 			}
 
@@ -97,6 +101,12 @@
 
 		await importLegacyFiles(files)
 	}
+
+	const logoutJellyfin = () => {
+		jellyfinStore.logout()
+		// Logic to clear Jellyfin tracks from DB would be good here,
+		// but for now they will just disappear from the list on next refresh.
+	}
 </script>
 
 {#snippet addButton(title: string, onclick: () => void)}
@@ -117,47 +127,74 @@
 
 <ul class="grid grid-cols-[repeat(auto-fill,minmax(240px,1fr))] gap-2">
 	{#each directories as dir}
+		{@const isJellyfin = 'jellyfin' in dir}
+		{@const isLegacy = 'legacy' in dir}
 		<li
 			class={[
 				'flex h-16 items-center gap-2 rounded-sm pr-1 pl-4 text-onTertiaryContainer',
-				dir.legacy ? 'bg-tertiaryContainer/40' : 'bg-tertiaryContainer/56',
+				isLegacy ? 'bg-tertiaryContainer/40' : (isJellyfin ? 'bg-primaryContainer/30' : 'bg-tertiaryContainer/56'),
 			]}
 		>
-			{#if dir.legacy}
+			{#if isLegacy}
 				<div {@attach tooltip(m.settingsTracksInAppStorageTooltip())}>
 					<Icon type="information" class="size-4 text-onTertiaryContainer/54" />
 				</div>
+			{:else if isJellyfin}
+				<Icon type="album" class="size-4 text-primary" />
 			{/if}
 
 			<div class="flex flex-col overflow-hidden">
-				<div class="truncate">
-					{dir.legacy ? m.settingsTracksInsideAppMemory() : dir.handle.name}
+				<div class="truncate font-medium">
+					{#if isLegacy}
+						{m.settingsTracksInsideAppMemory()}
+					{:else if isJellyfin}
+						{dir.serverName} (Jellyfin)
+					{:else}
+						{dir.handle.name}
+					{/if}
 				</div>
-				<div class="text-body-sm">
+				<div class="text-body-sm opacity-70">
 					{m.settingsDirectoriesTracksCount({ count: dir.count })}
 				</div>
 			</div>
 
 			<div class="ml-auto flex items-center gap-1">
-				<!-- Chromium on Android broke persisted handles https://issues.chromium.org/issues/499064852 -->
-				{#if !(dir.legacy || isAndroidPlatform)}
+				{#if isJellyfin}
+					<IconButton
+						disabled={disabled || jellyfinSync.isSyncing}
+						icon="cached"
+						tooltip="Sync now"
+						onclick={() => {
+							void jellyfinSync.syncAll()
+						}}
+					/>
 					<IconButton
 						{disabled}
-						icon="cached"
-						tooltip={m.settingsDirRescan()}
+						icon="logout"
+						tooltip={m.jellyfinLogout()}
+						onclick={logoutJellyfin}
+					/>
+				{:else}
+					<!-- Chromium on Android broke persisted handles https://issues.chromium.org/issues/499064852 -->
+					{#if !(isLegacy || isAndroidPlatform)}
+						<IconButton
+							{disabled}
+							icon="cached"
+							tooltip={m.settingsDirRescan()}
+							onclick={() => {
+								void rescanDirectory((dir as any).id, (dir as any).handle)
+							}}
+						/>
+					{/if}
+					<IconButton
+						{disabled}
+						icon="trashOutline"
+						tooltip={m.settingsDirRemove()}
 						onclick={() => {
-							void rescanDirectory(dir.id, dir.handle)
+							void removeDirectory((dir as any).id)
 						}}
 					/>
 				{/if}
-				<IconButton
-					{disabled}
-					icon="trashOutline"
-					tooltip={m.settingsDirRemove()}
-					onclick={() => {
-						void removeDirectory(dir.id)
-					}}
-				/>
 			</div>
 		</li>
 	{/each}

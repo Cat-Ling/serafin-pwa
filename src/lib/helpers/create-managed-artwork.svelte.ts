@@ -1,3 +1,5 @@
+import { getJellyfinImageUrl } from '$lib/library/jellyfin-adapter.ts'
+
 class Artwork {
 	static idCounter = 0
 
@@ -48,14 +50,26 @@ const scheduleCleanup = (artwork: Artwork) => {
 	}, thirtySeconds)
 }
 
-export const createManagedArtwork = (getImage: () => Blob | undefined | null) => {
+export const createManagedArtwork = (
+	getImage: () => Blob | string | undefined | null,
+	getUuid?: () => string | undefined,
+) => {
 	const refId = Artwork.createRefId()
 
 	const artwork = $derived.by(() => {
 		const image = getImage()
+		const uuid = getUuid?.()
+
+		if (uuid) {
+			return { url: getJellyfinImageUrl(uuid, 512, 512), refs: new Set() }
+		}
 
 		if (!image) {
 			return null
+		}
+
+		if (typeof image === 'string') {
+			return { url: image, refs: new Set() }
 		}
 
 		let artworkInstance = cache.get(image)
@@ -74,7 +88,7 @@ export const createManagedArtwork = (getImage: () => Blob | undefined | null) =>
 		// Need to use variable here so cleanup uses
 		// previous value instead of the current one
 		const savedArtwork = artwork
-		if (!savedArtwork) {
+		if (!savedArtwork || !(savedArtwork instanceof Artwork)) {
 			return
 		}
 

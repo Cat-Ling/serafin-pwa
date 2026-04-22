@@ -1,9 +1,11 @@
 const getValue = (key: string) => {
 	try {
 		const valueRaw = localStorage.getItem(key)
-		const value = valueRaw === null || valueRaw === undefined ? null : JSON.parse(valueRaw)
+		if (valueRaw === null || valueRaw === undefined || valueRaw === 'undefined') {
+			return null
+		}
 
-		return value
+		return JSON.parse(valueRaw)
 	} catch (error) {
 		console.error(`Failed to get persisted value for key "${key}"`, error)
 
@@ -16,7 +18,7 @@ export const getPersistedValue = <T, D = null>(
 	key: string,
 	defaultValue: D = null as D,
 ): T | D => {
-	const fullKey = `snaeplayer-${storeName}.${key}`
+	const fullKey = `serafin-pwa-${storeName}.${key}`
 	const value = getValue(fullKey)
 
 	return value ?? defaultValue
@@ -24,7 +26,7 @@ export const getPersistedValue = <T, D = null>(
 
 export const persist = <T>(storeName: string, instance: T, keys: (keyof T & string)[]): void => {
 	for (const key of keys) {
-		const fullKey = `snaeplayer-${storeName}.${key}`
+		const fullKey = `serafin-pwa-${storeName}.${key}`
 
 		const value = getValue(fullKey)
 		if (value !== null) {
@@ -41,7 +43,11 @@ export const persist = <T>(storeName: string, instance: T, keys: (keyof T & stri
 					return
 				}
 
-				localStorage.setItem(fullKey, JSON.stringify(updatedValue))
+				if (updatedValue === undefined) {
+					localStorage.removeItem(fullKey)
+				} else {
+					localStorage.setItem(fullKey, JSON.stringify(updatedValue))
+				}
 			})
 		})
 	}

@@ -53,7 +53,7 @@
 		}
 
 		return null
-	})
+	}, () => item?.uuid)
 
 	const isWideLayout = new MediaQuery('(min-width: 1154px)')
 

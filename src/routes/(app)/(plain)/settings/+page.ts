@@ -8,7 +8,12 @@ export type DirectoryWithCount = { count: number } & (
 			id: typeof LEGACY_NO_NATIVE_DIRECTORY
 			legacy: true
 	  }
-	| (Directory & { legacy?: false })
+	| {
+			id: 'jellyfin'
+			jellyfin: true
+			serverName: string
+	  }
+	| (Directory & { legacy?: false; jellyfin?: false })
 )
 
 const debouncedRefetch = debounce((refetch: () => void) => {
@@ -22,34 +27,62 @@ const createDirectoriesPageQuery = () =>
 			const db = await getDatabase()
 			const directories = await db.getAll('directories')
 			const tx = db.transaction('tracks')
-			const directoriesIndex = tx.objectStore('tracks').index('directory')
+			const store = tx.objectStore('tracks')
+			
+			const results: DirectoryWithCount[] = []
 
-			const directoriesWithCount = await Promise.all([
-				...directories.map(async (directory) => ({
-					...directory,
-					count: await directoriesIndex.count(directory.id),
-				})),
-				directoriesIndex.count(LEGACY_NO_NATIVE_DIRECTORY).then(
-					(count): DirectoryWithCount => ({
-						id: LEGACY_NO_NATIVE_DIRECTORY,
-						legacy: true,
-						count,
-					}),
-				),
-			])
-
-			const legacyDir = directoriesWithCount.at(-1)
-			if (legacyDir && legacyDir.count === 0) {
-				// Remove the legacy directory if it has no tracks
-				directoriesWithCount.pop()
+			// 1. Native Directories
+			for (const dir of directories) {
+				results.push({
+					...dir,
+					count: await store.index('directory').count(dir.id)
+				})
 			}
 
-			return directoriesWithCount
+			// 2. Legacy/App Storage (Local files without a native directory)
+			// We only count local tracks (source !== 'jellyfin') with directory -1
+			let legacyCount = 0
+			for await (const cursor of store.index('directory').iterate(LEGACY_NO_NATIVE_DIRECTORY)) {
+				if (cursor.value.source !== 'jellyfin') {
+					legacyCount++
+				}
+			}
+			
+			if (legacyCount > 0) {
+				results.push({
+					id: LEGACY_NO_NATIVE_DIRECTORY,
+					legacy: true,
+					count: legacyCount
+				})
+			}
+
+			// 3. Jellyfin Library
+			let jellyfinCount = 0
+			// We can use a separate index for source if it existed, but for now we'll iterate or just count
+			// Since we want efficiency, let's assume all tracks with directory -1 and source jellyfin are Jellyfin
+			// Or better, let's just count all tracks with source: 'jellyfin'
+			for await (const cursor of store) {
+				if (cursor.value.source === 'jellyfin') {
+					jellyfinCount++
+				}
+			}
+
+			if (jellyfinCount > 0) {
+				const { useJellyfinStore } = await import('$lib/stores/jellyfin.svelte.ts')
+				const jellyfin = useJellyfinStore()
+				results.push({
+					id: 'jellyfin' as any,
+					jellyfin: true,
+					count: jellyfinCount,
+					serverName: jellyfin.serverName ?? 'Jellyfin'
+				})
+			}
+
+			return results
 		},
 		onDatabaseChange: (changes, { refetch }) => {
 			for (const change of changes) {
 				if (change.storeName === 'tracks' || change.storeName === 'directories') {
-					// While tracks are being imported/removed, the count may change frequently
 					debouncedRefetch(refetch)
 					break
 				}

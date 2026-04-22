@@ -1,19 +1,17 @@
 {
 	"$schema": "https://inlang.com/schema/inlang-message-format",
-
 	"about": "Apie",
 	"aboutHomepage": "Namai",
-	"aboutJoinDiscord": "Discord",
+	"aboutCredits": "Credits",
+	"aboutOriginalCreator": "Original creator",
+	"aboutBasedOn": "Based on {name}",
 	"aboutPrivacy": "Privatumas",
 	"aboutSourceCode": "Programos kodas",
-
 	"album": "Albumas",
 	"albums": "Albumai",
-
-	"appName": "Snae grotuvas",
-	"appNameShort": "Snae",
+	"appName": "Serafin grotuvas",
+	"appNameShort": "Serafin",
 	"appUpdateAvailable": "Galimas programos atnaujinimas",
-
 	"artist": "Atlikėjas",
 	"artists": "Atlikėjai",
 	"cancel": "Atšaukti",
@@ -36,13 +34,22 @@
 	"equalizerReset": "Atstatyti",
 	"equalizerStatusEnabled": "Įjungtas",
 	"equalizerTitle": "Ekvalaizeris",
-
 	"errorPageDoesNotExist": "Panašu, kad šio puslapio nėra.",
 	"errorUnexpected": "Įvyko netikėta klaida.",
 	"favorites": "Mėgstamiausi",
 	"foundAnIssue": "Radote klaidą?",
 	"goBack": "Grįžti",
 	"goHome": "Grįžti į pradžią",
+	"jellyfinLogin": "Jellyfin Login",
+	"jellyfinLogout": "Jellyfin Logout",
+	"jellyfinSettings": "Jellyfin Settings",
+	"jellyfinTranscode": "Transcode Audio",
+	"jellyfinTranscodeBitrate": "Transcode Bitrate",
+	"jellyfinContentView": "Content View",
+	"jellyfinGridColumns": "Grid Columns",
+	"jellyfinShowTextOnGrid": "Show Text on Grid",
+	"jellyfinShuffleLimit": "Shuffle Item Limit",
+	"jellyfinHideDuplicateArtists": "Hide Song Artists if Same as Album",
 	"library": "Biblioteka",
 	"libraryAddToPlaylist": "Pridėti į grojaraštį",
 	"libraryApplicationMenu": "Programos meniu",
@@ -54,7 +61,6 @@
 	"libraryDirPromptBrowserPermission": "Reikalingas naršyklės leidimas",
 	"libraryDirPromptExplanation": "Kad galėtumėte klausytis muzikos, programai reikia leidimo pasiekti šiuos katalogus:",
 	"libraryDirPromptGrant": "Suteikti",
-
 	"libraryEditPlaylist": "Redaguoti grojaraštį",
 	"libraryEditPlaylistName": "Redaguoti grojaraščio pavadinimą",
 	"libraryEmpty": "Jūsų biblioteka tuščia",
@@ -62,7 +68,6 @@
 	"libraryItemRemovedFromLibrary": "Elementas pašalintas iš bibliotekos",
 	"libraryItemsRemovedFromLibrary": "Elementai pašalinti iš bibliotekos",
 	"libraryNewPlaylist": "Naujas grojaraštis",
-
 	"libraryNoResults": "Rezultatų nerasta",
 	"libraryNoResultsExplanation": "Pabandykite ieškoti kitaip",
 	"libraryOpenApplicationMenu": "Atidaryti programos meniu",
@@ -76,7 +81,6 @@
 	"libraryRemove": "Pašalinti",
 	"libraryRemoveFromLibrary": "Pašalinti iš bibliotekos",
 	"librarySave": "Išsaugoti",
-
 	"librarySearch": "Paieška",
 	"librarySelectSomethingToBeShown": "Pasirinkite ką nors iš sąrašo, kad būtų rodoma čia",
 	"librarySplitViewDisable": "Išjungti padalintą išdėstymą",
@@ -84,7 +88,6 @@
 	"libraryStartByAdding": "Pradėkite pridėdami muzikos",
 	"libraryToggleSortOrder": "Perjungti rūšiavimo tvarką",
 	"libraryTrackRemovedFromPlaylist": "Kūrinys pašalintas iš grojaraščio",
-
 	"libraryTrackRemoveFromPlaylist": "Pašalinti iš grojaraščio",
 	"libraryTracksCount": "{count} kūriniai",
 	"libraryViewDetails": "Peržiūrėti detales",
@@ -94,7 +97,6 @@
 	"noItemsToDisplay": "Nėra elementų rodymui",
 	"pause": "Pristabdyti",
 	"play": "Groti",
-
 	"player": "Grotuvas",
 	"playerAddToQueue": "Pridėti į eilę",
 	"playerAudioErrorLoadError": "Nepavyko įkelti garso įrašo \"{name}\"",
@@ -128,16 +130,15 @@
 	"reload": "Įkelti iš naujo",
 	"replace": "Pakeisti",
 	"replaceDirectoryExplanation": "Katalogas {newDir}, kurį pridedate, yra {existingDirs} pirminis katalogas, kuris jau egzistuoja jūsų bibliotekoje.\n Esamiems kūriniams bibliotekoje niekas nepasikeis.",
-
 	"replaceDirectoryQ": "Pakeisti katalogą?",
 	"selectAll": "Pasirinkti viską",
 	"selectedCount": "Pasirinkta: {count}",
 	"settingPickColorFromArtwork": "Automatiškai parinkti spalvą pagal šiuo metu grojančio kūrinio viršelį",
 	"settings": "Nustatymai",
 	"settingsAbout": "Apie",
-
+	"settingsAudio": "Audio",
+	"settingsInterface": "Interface",
 	"settingsAddDirectory": "Pridėti katalogą",
-
 	"settingsAllDataLocal": "Visi duomenys išsaugomi jūsų įrenginyje",
 	"settingsAppearance": "Išvaizda",
 	"settingsApplicationTheme": "Programos tema",
@@ -180,12 +181,10 @@
 	"settingsThemeLight": "Šviesi",
 	"settingsTracksInAppStorageTooltip": "Tai apima kūrinius, saugomus programos saugykloje ir/arba duomenis, perkeltus iš Snae Player v1",
 	"settingsTracksInsideAppMemory": "Kūriniai programos saugykloje",
-
 	"shuffle": "Maišyti",
 	"successfullyRemovedTracks": "Sėkmingai pašalinta {count} kūrinių",
 	"track": "Kūrinys",
 	"trackAddToFavorites": "Pridėti prie mėgstamiausių",
-
 	"trackPlay": "Groti {name}",
 	"trackRemoveFromFavorites": "Pašalinti iš mėgstamiausių",
 	"tracks": "Kūriniai",
@@ -195,7 +194,6 @@
 	"unknown": "Nežinoma",
 	"validationMaxLength": "Leidžiama daugiausiai {max} simbolių",
 	"validationMinLength": "Reikalinga bent {min} simbolių",
-
 	"validationRequired": "Laukas yra privalomas",
 	"year": "Metai"
 }

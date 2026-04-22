@@ -1,19 +1,17 @@
 {
 	"$schema": "https://inlang.com/schema/inlang-message-format",
-
 	"about": "About",
 	"aboutHomepage": "Homepage",
-	"aboutJoinDiscord": "Join our Discord",
+	"aboutCredits": "Credits",
+	"aboutOriginalCreator": "Original creator",
+	"aboutBasedOn": "Based on {name}",
 	"aboutPrivacy": "Privacy",
 	"aboutSourceCode": "Source code",
-
 	"album": "Album",
 	"albums": "Albums",
-
-	"appName": "Snae Player",
-	"appNameShort": "Snae",
+	"appName": "Serafin Player",
+	"appNameShort": "Serafin",
 	"appUpdateAvailable": "App update is available",
-
 	"artist": "Artist",
 	"artists": "Artists",
 	"cancel": "Cancel",
@@ -22,7 +20,6 @@
 	"directoryIsIncludedInParent": "\"{newDir}\" is subdirectory of \"{existingDir}\" which is already in your Library. You do not need to add it again.",
 	"dismiss": "Dismiss",
 	"duration": "Duration",
-
 	"equalizerClose": "Close",
 	"equalizerOpenEqualizer": "Open equalizer",
 	"equalizerPresetAcoustic": "Acoustic",
@@ -37,13 +34,22 @@
 	"equalizerReset": "Reset",
 	"equalizerStatusEnabled": "Enabled",
 	"equalizerTitle": "Equalizer",
-
 	"errorPageDoesNotExist": "Looks like this page doesn't exist.",
 	"errorUnexpected": "An unexpected error occurred.",
 	"favorites": "Favorites",
 	"foundAnIssue": "Found an issue?",
 	"goBack": "Go back",
 	"goHome": "Go home",
+	"jellyfinLogin": "Jellyfin Login",
+	"jellyfinLogout": "Jellyfin Logout",
+	"jellyfinSettings": "Jellyfin Settings",
+	"jellyfinTranscode": "Transcode Audio",
+	"jellyfinTranscodeBitrate": "Transcode Bitrate",
+	"jellyfinContentView": "Content View",
+	"jellyfinGridColumns": "Grid Columns",
+	"jellyfinShowTextOnGrid": "Show Text on Grid",
+	"jellyfinShuffleLimit": "Shuffle Item Limit",
+	"jellyfinHideDuplicateArtists": "Hide Song Artists if Same as Album",
 	"library": "Library",
 	"libraryAddToPlaylist": "Add to playlist",
 	"libraryApplicationMenu": "Application menu",
@@ -55,7 +61,6 @@
 	"libraryDirPromptBrowserPermission": "Browser permission required",
 	"libraryDirPromptExplanation": "To play music, the app needs permission to access these directories:",
 	"libraryDirPromptGrant": "Grant",
-
 	"libraryEditPlaylist": "Edit playlist",
 	"libraryEditPlaylistName": "Edit playlist name",
 	"libraryEmpty": "Your library is empty",
@@ -63,7 +68,6 @@
 	"libraryItemRemovedFromLibrary": "Item removed from library",
 	"libraryItemsRemovedFromLibrary": "Items removed from library",
 	"libraryNewPlaylist": "New playlist",
-
 	"libraryNoResults": "No results found",
 	"libraryNoResultsExplanation": "Try searching for something else",
 	"libraryOpenApplicationMenu": "Open application menu",
@@ -77,7 +81,6 @@
 	"libraryRemove": "Remove",
 	"libraryRemoveFromLibrary": "Remove from library",
 	"librarySave": "Save",
-
 	"librarySearch": "Search",
 	"librarySelectSomethingToBeShown": "Select something from the list to be shown here",
 	"librarySplitViewDisable": "Disable split view layout",
@@ -85,7 +88,6 @@
 	"libraryStartByAdding": "Start by adding some music",
 	"libraryToggleSortOrder": "Toggle sort order",
 	"libraryTrackRemovedFromPlaylist": "Track removed from playlist",
-
 	"libraryTrackRemoveFromPlaylist": "Remove from playlist",
 	"libraryTracksCount": "{count} tracks",
 	"libraryViewDetails": "View details",
@@ -95,7 +97,6 @@
 	"noItemsToDisplay": "No items to display",
 	"pause": "Pause",
 	"play": "Play",
-
 	"player": "Player",
 	"playerAddToQueue": "Add to queue",
 	"playerAudioErrorLoadError": "Failed to load audio for \"{name}\"",
@@ -129,16 +130,15 @@
 	"reload": "Reload",
 	"replace": "Replace",
 	"replaceDirectoryExplanation": "The directory {newDir} you're adding is a parent of {existingDirs} which already exists in your Library.\n No changes will occur to existing tracks in your library.",
-
 	"replaceDirectoryQ": "Replace directory?",
 	"selectAll": "Select all",
 	"selectedCount": "Selected {count}",
 	"settingPickColorFromArtwork": "Automatically pick color from currently playing song artwork",
 	"settings": "Settings",
 	"settingsAbout": "About",
-
+	"settingsAudio": "Audio",
+	"settingsInterface": "Interface",
 	"settingsAddDirectory": "Add directory",
-
 	"settingsAllDataLocal": "All data is kept on your device",
 	"settingsAppearance": "Appearance",
 	"settingsApplicationTheme": "Application theme",
@@ -154,7 +154,7 @@
 	"settingsGrantDirectoryAccess": "You need to allow the app access to the directory, via browser permission so it can scan its contents",
 	"settingsImportTracks": "Import tracks",
 	"settingsInstallAppDesktop": "desktop",
-	"settingsInstallAppExplanation": "Add Snae Player to your {device} for more immersive experience",
+	"settingsInstallAppExplanation": "Add Serafin Player to your {device} for more immersive experience",
 	"settingsInstallAppHomeAction": "Install",
 	"settingsInstallAppHomeScreen": "home screen",
 	"settingsLanguage": "Language",
@@ -179,14 +179,12 @@
 	"settingsThemeAuto": "Auto",
 	"settingsThemeDark": "Dark",
 	"settingsThemeLight": "Light",
-	"settingsTracksInAppStorageTooltip": "This contains tracks stored in app storage and/or data you migrated from Snae Player v1",
+	"settingsTracksInAppStorageTooltip": "This contains tracks stored in app storage and/or data you migrated from Serafin Player v1",
 	"settingsTracksInsideAppMemory": "Tracks inside app storage",
-
 	"shuffle": "Shuffle",
 	"successfullyRemovedTracks": "Successfully removed {count} tracks",
 	"track": "Track",
 	"trackAddToFavorites": "Add to favorites",
-
 	"trackPlay": "Play {name}",
 	"trackRemoveFromFavorites": "Remove from favorites",
 	"tracks": "Tracks",
@@ -196,7 +194,6 @@
 	"unknown": "Unknown",
 	"validationMaxLength": "At most {max} characters are allowed",
 	"validationMinLength": "At least {min} characters are required",
-
 	"validationRequired": "Field is required",
 	"year": "Year"
 }

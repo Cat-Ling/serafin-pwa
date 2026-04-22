@@ -56,7 +56,7 @@
 		}
 
 		return undefined
-	})
+	}, () => item?.uuid)
 
 	const linkProps = $derived.by(() => {
 		const item = query.value
@@ -80,10 +80,10 @@
 
 	const dbGetAlbumOrArtistTrackIdsByName = (name: string) => {
 		if (type === 'albums') {
-			return dbGetAlbumTracksIdsByName(name)
+			return dbGetAlbumTracksIdsByName(name, itemId)
 		}
 
-		return dbGetArtistTracksIdsByName(name)
+		return dbGetArtistTracksIdsByName(name, itemId)
 	}
 
 	const menuItems = () => {

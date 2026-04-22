@@ -5,7 +5,7 @@ export const prerender = true
 const manifest = {
 	short_name: m.appNameShort(),
 	name: m.appName(),
-	start_url: './library/tracks/',
+	start_url: '/library/tracks',
 	scope: '../',
 	theme_color: THEME_PALLETTE_DARK.surface,
 	background_color: THEME_PALLETTE_DARK.surface,

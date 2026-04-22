@@ -8,13 +8,16 @@
 	import Slider from '$lib/components/Slider.svelte'
 	import Spinner from '$lib/components/Spinner.svelte'
 	import Switch from '$lib/components/Switch.svelte'
+	import TextField from '$lib/components/TextField.svelte'
 	import { isDatabaseOperationPending } from '$lib/db/lock-database.ts'
 	import { initPageQueries } from '$lib/db/query/page-query.svelte.ts'
 	import { supportsChangingAudioVolume } from '$lib/helpers/audio.ts'
 	import { Debounced } from '$lib/helpers/debounced.svelte.ts'
 	import { isFileSystemAccessSupported } from '$lib/helpers/file-system.ts'
 	import { debounce } from '$lib/helpers/utils/debounce.ts'
+	import { isMobile } from '$lib/helpers/utils/ua.ts'
 	import type { AppMotionOption, AppThemeOption } from '$lib/stores/main/store.svelte.ts'
+	import { useJellyfinStore } from '$lib/stores/jellyfin.svelte.ts'
 	import {
 		PLAYER_PLAYBACK_RATE_MAX,
 		PLAYER_PLAYBACK_RATE_MIN,
@@ -32,6 +35,7 @@
 	const mainStore = useMainStore()
 	const player = usePlayer()
 	const dialogs = useDialogsStore()
+	const jellyfin = useJellyfinStore()
 
 	const directories = $derived(data.directoriesQuery.value)
 
@@ -74,6 +78,20 @@
 		{ name: '繁體中文', value: 'zh-TW' },
 	]
 
+	const bitrateOptions = [
+		{ value: 64, label: '64 kbps' },
+		{ value: 96, label: '96 kbps' },
+		{ value: 128, label: '128 kbps' },
+		{ value: 192, label: '192 kbps' },
+		{ value: 256, label: '256 kbps' },
+		{ value: 320, label: '320 kbps' },
+	]
+
+	const contentViewOptions = [
+		{ value: 'grid', label: 'Grid' },
+		{ value: 'list', label: 'List' },
+	]
+
 	const updateMainColor = debounce((value: string | null) => {
 		mainStore.customThemePaletteHex = value
 	}, 400)
@@ -111,202 +129,186 @@
 			</div>
 		{/if}
 	</div>
-</section>
 
-<InstallAppBanner class="settings-max-width mt-6" />
-
-<section class="card settings-max-width mx-auto mt-6 w-full text-body-lg">
-	{@render heading(m.settingsAppearance())}
-
-	<div class="flex items-center justify-between p-4">
-		<div>{m.settingsApplicationTheme()}</div>
-
-		<Select
-			bind:selected={mainStore.theme}
-			items={themeOptions}
-			key="value"
-			labelKey="name"
-			class="w-40"
-		/>
-	</div>
-
-	<div class="flex items-center justify-between p-4">
-		<div>{m.settingPickColorFromArtwork()}</div>
-
-		<Switch bind:checked={mainStore.pickColorFromArtwork} />
-	</div>
-
-	<div class="flex flex-col items-center gap-x-2 gap-y-4 p-4 sm:flex-row">
-		<div class="mr-auto flex items-center gap-2">
-			{m.settingsPrimaryColor()}
-
-			{#if mainStore.customThemePaletteHex}
-				<div
-					class="pointer-events-none size-6 shrink-0 items-center justify-center rounded-md ring ring-outline/40"
-					style:background={mainStore.customThemePaletteHex}
-				></div>
-			{/if}
-		</div>
-
-		<div class="flex items-center gap-2 max-sm:w-full">
-			{#if mainStore.customThemePaletteHex}
-				<Button
-					kind="outlined"
-					class="max-sm:w-full"
-					disabled={!mainStore.customThemePaletteHex}
-					onclick={() => {
-						mainStore.customThemePaletteHex = null
-					}}
-				>
-					{m.settingsColorReset()}
-				</Button>
-			{/if}
-
-			<Button
-				kind="toned"
-				class="max-sm:w-full"
-				onclick={() => {
-					const colorPicker = document.getElementById('color-picker') as HTMLInputElement
-					colorPicker.click()
-				}}
-			>
-				<Icon type="eyedropper" class="size-5" />
-
-				{m.settingsColorPick()}
-
-				<input
-					id="color-picker"
-					type="color"
-					tabindex="-1"
-					bind:value={
-						() => mainStore.customThemePaletteHex ?? '#000000', (value) => updateMainColor(value)
-					}
-					class="pointer-events-none absolute inset-0 h-full w-full appearance-none opacity-0"
-				/>
-			</Button>
-		</div>
-	</div>
-
-	<Separator />
-
-	<div class="flex items-center justify-between p-4">
-		<div>{m.settingsMotion()}</div>
-
-		<Select
-			bind:selected={mainStore.motion}
-			items={motionOptions}
-			key="value"
-			labelKey="name"
-			class="w-40"
-		/>
-	</div>
-</section>
-
-<section class="card settings-max-width mx-auto mt-6 w-full text-body-lg">
-	{@render heading(m.player())}
-
-	{#if supportsChangingAudioVolume()}
-		<div class="flex items-center justify-between p-4">
-			<div>{m.settingsDisplayVolumeSlider()}</div>
-
-			<Switch bind:checked={mainStore.volumeSliderEnabled} />
-		</div>
-
+	{#if jellyfin.isLoggedIn}
 		<Separator />
-	{/if}
-
-	<div class="flex flex-col justify-between gap-y-4 p-4 sm:flex-row sm:items-center">
-		<div class="flex items-center gap-2">
-			<div>{m.equalizerTitle()}</div>
-
-			{#if player.equalizer.enabled}
-				<div
-					class="rounded-full bg-primaryContainer px-2 py-0.5 text-label-sm text-onPrimaryContainer"
-				>
-					{m.equalizerStatusEnabled()}
+		{@render heading(m.jellyfinSettings())}
+		<div class="flex flex-col gap-4 p-4">
+			<div class="flex items-center justify-between gap-4">
+				<div class="flex flex-col">
+					<div>{m.jellyfinTranscode()}</div>
+					<div class="text-body-sm opacity-54">Useful for slow connections</div>
 				</div>
-			{/if}
-		</div>
-
-		<Button
-			kind="toned"
-			onclick={() => {
-				dialogs.equalizerDialogOpen = true
-			}}
-		>
-			{m.equalizerOpenEqualizer()}
-		</Button>
-	</div>
-
-	<Separator />
-
-	<div class="flex flex-col justify-between gap-3 p-4 sm:flex-row sm:items-center">
-		<div>{m.settingsPlaybackSpeed()}</div>
-
-		<div class="flex w-full items-center gap-3 sm:w-56">
-			<div class="w-12 text-center text-label-lg tabular-nums sm:text-right">
-				{player.playbackRate}x
+				<Switch bind:checked={jellyfin.shouldTranscode} />
 			</div>
 
-			<Slider
-				min={PLAYER_PLAYBACK_RATE_MIN}
-				max={PLAYER_PLAYBACK_RATE_MAX}
-				step={0.05}
-				bind:value={player.playbackRate}
+			{#if jellyfin.shouldTranscode}
+				<div class="flex items-center justify-between gap-4">
+					<div>{m.jellyfinTranscodeBitrate()}</div>
+					<Select
+						items={bitrateOptions}
+						key="value"
+						labelKey="label"
+						bind:selected={jellyfin.transcodeBitrate}
+						class="w-32"
+					/>
+				</div>
+			{/if}
+
+			<div class="flex items-center justify-between gap-4">
+				<div>{m.jellyfinContentView()}</div>
+				<Select
+					items={contentViewOptions}
+					key="value"
+					labelKey="label"
+					bind:selected={jellyfin.contentViewType}
+					class="w-32"
+				/>
+			</div>
+
+			<div class="flex items-center justify-between gap-4">
+				<div>{m.jellyfinHideDuplicateArtists()}</div>
+				<Switch bind:checked={jellyfin.hideSongArtistsIfSameAsAlbum} />
+			</div>
+
+			<div class="flex items-center justify-between gap-4">
+				<div>{m.jellyfinShuffleLimit()}</div>
+				<div class="flex w-32 items-center gap-2">
+					<TextField
+						name="shuffleLimit"
+						type="text"
+						bind:value={jellyfin.songShuffleItemCount}
+					/>
+				</div>
+			</div>
+		</div>
+	{/if}
+
+	<Separator />
+
+	{@render heading(m.settingsAppearance())}
+
+	<div class="flex flex-col gap-4 p-4">
+		<div class="flex items-center justify-between gap-4">
+			<div>{m.settingsApplicationTheme()}</div>
+			<Select
+				items={themeOptions}
+				key="value"
+				labelKey="name"
+				bind:selected={mainStore.theme}
+				class="w-32"
+			/>
+		</div>
+
+		<div class="flex items-center justify-between gap-4">
+			<div class="flex flex-col">
+				<div>{m.settingsPrimaryColor()}</div>
+				<div class="text-body-sm opacity-54">
+					{m.settingPickColorFromArtwork()}
+				</div>
+			</div>
+
+			<div class="flex items-center gap-4">
+				{#if !mainStore.pickColorFromArtwork}
+					<input
+						type="color"
+						class="h-10 w-10 appearance-none overflow-hidden rounded-full border-none p-0"
+						value={mainStore.customThemePaletteHex ?? '#000000'}
+						oninput={(e) => updateMainColor(e.currentTarget.value)}
+					/>
+				{/if}
+				<Switch bind:checked={mainStore.pickColorFromArtwork} />
+			</div>
+		</div>
+
+		<div class="flex items-center justify-between gap-4">
+			<div>Split layout enabled</div>
+			<Switch bind:checked={mainStore.librarySplitLayoutEnabled} />
+		</div>
+
+		<div class="flex items-center justify-between gap-4">
+			<div>{m.settingsMotion()}</div>
+			<Select
+				items={motionOptions}
+				key="value"
+				labelKey="name"
+				bind:selected={mainStore.motion}
+				class="w-32"
+			/>
+		</div>
+
+		<div class="flex items-center justify-between gap-4">
+			<div>{m.settingsLanguage()}</div>
+			<Select
+				items={languageOptions}
+				key="value"
+				labelKey="name"
+				selected={getLocale()}
+				onselected={(value) => setLocale(value)}
+				class="w-32"
 			/>
 		</div>
 	</div>
 
-	<div class="flex justify-end px-4 pb-4">
-		<Button
-			kind="outlined"
-			disabled={player.playbackRate === 1}
-			onclick={() => {
-				player.playbackRate = 1
-			}}
-		>
-			{m.settingsPlaybackSpeedReset()}
-		</Button>
+	<Separator />
+
+	{@render heading(m.settingsAudio())}
+
+	<div class="flex flex-col gap-4 p-4">
+		{#if supportsChangingAudioVolume}
+			<div class="flex items-center justify-between gap-4">
+				<div>{m.settingsDisplayVolumeSlider()}</div>
+				<Switch bind:checked={mainStore.volumeSliderEnabled} />
+			</div>
+		{/if}
+
+		<div class="flex flex-col gap-1">
+			<div>{m.settingsPlaybackSpeed()}</div>
+			<div class="flex items-center gap-4">
+				<Slider
+					class="w-full"
+					min={PLAYER_PLAYBACK_RATE_MIN}
+					max={PLAYER_PLAYBACK_RATE_MAX}
+					step={0.1}
+					bind:value={player.playbackRate}
+				/>
+				<div class="w-10 text-right tabular-nums">{player.playbackRate.toFixed(1)}x</div>
+				<IconButton
+					icon="refresh"
+					tooltip={m.settingsPlaybackSpeedReset()}
+					onclick={() => (player.playbackRate = 1)}
+				/>
+			</div>
+		</div>
+
+		<div class="flex items-center justify-between gap-4">
+			<div class="flex flex-col">
+				<div>{m.settingsPreservePitch()}</div>
+				<div class="text-body-sm opacity-54">
+					{m.settingsPreservePitchInfo()}
+				</div>
+			</div>
+			<Switch bind:checked={player.preservePitch} />
+		</div>
+
+		<div class="flex items-center justify-between gap-4">
+			<div>{m.equalizerTitle()}</div>
+			<IconButton
+				icon="chevronRight"
+				tooltip={m.equalizerTitle()}
+				onclick={() => (dialogs.equalizerDialogOpen = true)}
+			/>
+		</div>
 	</div>
 
 	<Separator />
 
-	<div class="flex items-center justify-between p-4">
-		<div class="flex items-center gap-2">
-			<div>{m.settingsPreservePitch()}</div>
+	<div class="flex flex-col gap-1 p-4">
+		<InstallAppBanner />
 
-			<button
-				type="button"
-				class="interactable flex size-6 items-center justify-center rounded-full text-onSurfaceVariant"
-				{@attach tooltip(m.settingsPreservePitchInfo())}
-			>
-				<Icon type="information" class="size-4" />
-			</button>
-		</div>
-
-		<Switch bind:checked={player.preservePitch} />
-	</div>
-</section>
-
-<section class="card settings-max-width mx-auto mt-6 w-full text-body-lg">
-	<div class="flex items-center justify-between p-4">
-		<div>{m.settingsLanguage()}</div>
-
-		<Select
-			bind:selected={() => getLocale(), setLocale}
-			items={languageOptions}
-			key="value"
-			labelKey="name"
-			class="w-40"
-		/>
-	</div>
-</section>
-
-<section class="card settings-max-width mx-auto mt-6 w-full text-body-lg">
-	<div class="flex items-center justify-between p-4">
-		<div>{m.about()}</div>
-
-		<IconButton as="a" href="/about" tooltip={m.about()} icon="chevronRight" />
+		<Button as="a" href="/about" tooltip={m.about()} icon="chevronRight">
+			{m.about()}
+		</Button>
 	</div>
 </section>
 

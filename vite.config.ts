@@ -77,7 +77,6 @@ export default defineConfig({
 			isServer: 'import.meta.env.SSR',
 		}),
 		getAutoImportPlugin('./.generated/types/auto-imports.d.ts'),
-		logChunkSizePlugin(),
 		{
 			name: 'ssr-config',
 			config(config) {

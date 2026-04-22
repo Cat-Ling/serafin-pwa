@@ -1,5 +1,5 @@
 /** @import { Config } from '@sveltejs/kit' */
-import adapter from '@sveltejs/adapter-static'
+import adapter from '@sveltejs/adapter-node'
 import { vitePreprocess } from '@sveltejs/vite-plugin-svelte'
 import { loadEnv } from 'vite'
 
@@ -19,10 +19,7 @@ const config = {
 			relative: false,
 		},
 		outDir: './.generated/svelte-kit',
-		adapter: adapter({
-			// When changing this, also update env variable
-			fallback: '200.html',
-		}),
+		adapter: adapter(),
 		alias: {
 			$paraglide: './.generated/paraglide',
 		},
@@ -34,11 +31,13 @@ const config = {
 				'img-src': [
 					'self',
 					'blob:',
+					'https:',
+					'http:',
 					env.PUBLIC_GOAT_COUNTER_URL ? `${env.PUBLIC_GOAT_COUNTER_URL}/count` : '',
 				],
-				'media-src': ['self', 'blob:'],
+				'media-src': ['self', 'blob:', 'https:', 'http:'],
 				'font-src': ['self'],
-				'connect-src': ['self', env.PUBLIC_GOAT_COUNTER_URL ?? ''],
+				'connect-src': ['self', 'https:', 'http:', env.PUBLIC_GOAT_COUNTER_URL ?? ''],
 				'form-action': ['none'],
 				'manifest-src': ['self'],
 				'base-uri': ['none'],

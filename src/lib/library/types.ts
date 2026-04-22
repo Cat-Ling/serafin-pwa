@@ -27,6 +27,8 @@ export type StringOrUnknownItem = (string & {}) | UnknownItem
 interface BaseMusicItem {
 	id: number
 	name: string
+	etag?: string
+	source?: 'local' | 'jellyfin'
 }
 
 export interface ParsedTrackData {

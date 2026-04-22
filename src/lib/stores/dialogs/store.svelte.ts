@@ -24,4 +24,8 @@ export class DialogsStore {
 	removeFromLibraryOpen: RemoveLibraryItemOptions | null = $state(null)
 
 	addTrackToPlaylistDialogOpen: readonly number[] | null = $state(null)
+
+	jellyfinLoginDialogOpen: boolean = $state(false)
+
+	jellyfinInfoDialogOpen: boolean = $state(false)
 }

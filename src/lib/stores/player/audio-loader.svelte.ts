@@ -113,6 +113,22 @@ export class AudioLoader {
 		return { status: 'loaded' } as const
 	}
 
+	loadUrl = async (url: string) => {
+		this.#current += 1
+		const gen = this.#current
+		this.loading = true
+		this.#clearSrc()
+
+		if (this.#current !== gen) {
+			return { status: 'superseded' } as const
+		}
+
+		this.#currentSrc = url
+		this.#onSrc(this.#currentSrc)
+		this.loading = false
+		return { status: 'loaded' } as const
+	}
+
 	reset = (): void => {
 		this.#current += 1
 		this.#clearSrc()

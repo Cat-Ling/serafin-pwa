@@ -11,18 +11,13 @@
 	const links: Links[] = [
 		{
 			title: m.aboutSourceCode(),
-			href: 'https://github.com/minht11/local-music-pwa',
+			href: 'https://github.com/Cat-Ling/serafin-pwa',
 			icon: 'github',
 		},
 		{
 			title: m.aboutPrivacy(),
-			href: 'https://github.com/minht11/local-music-pwa#privacy',
+			href: 'https://github.com/Cat-Ling/serafin-pwa#privacy',
 			icon: 'lockCheck',
-		},
-		{
-			title: m.aboutJoinDiscord(),
-			href: 'https://discord.gg/9z3BnHuXZb',
-			icon: 'discord',
 		},
 		{
 			title: m.aboutHomepage(),
@@ -55,4 +50,18 @@
 			</li>
 		{/each}
 	</ul>
+
+	<div class="mt-12 flex flex-col gap-4 px-4 text-center">
+		<div class="text-title-sm text-onSurfaceVariant uppercase tracking-widest">{m.aboutCredits()}</div>
+		<div class="flex flex-col gap-1">
+			<div class="text-body-md">{m.aboutBasedOn({ name: 'Snae Player' })}</div>
+			<div class="text-body-sm text-onSurfaceVariant">
+				{m.aboutOriginalCreator()}: 
+				<a href="https://github.com/minht11" class="text-primary hover:underline" target="_blank" rel="noopener">minht11</a>
+			</div>
+			<a href="https://github.com/minht11/local-music-pwa" class="text-body-sm text-primary hover:underline" target="_blank" rel="noopener">
+				Original Repository
+			</a>
+		</div>
+	</div>
 </section>

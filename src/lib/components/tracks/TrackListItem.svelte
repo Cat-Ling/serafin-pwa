@@ -61,7 +61,7 @@
 	const query = createTrackQuery(() => trackId)
 	const { value: track, loading } = $derived(query)
 
-	const artworkSrc = createManagedArtwork(() => track?.image?.small)
+	const artworkSrc = createManagedArtwork(() => track?.image?.small, () => track?.uuid)
 
 	const menu = useMenu()
 	const menuItemsWithItem = $derived(track && menuItems?.bind(null, track))

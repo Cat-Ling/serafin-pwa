@@ -5,6 +5,8 @@
 	import Separator from '$lib/components/Separator.svelte'
 	import { debounce } from '$lib/helpers/utils/debounce.ts'
 	import { navigateToExternal } from '$lib/helpers/utils/navigate.ts'
+	import { useDialogsStore } from '$lib/stores/dialogs/use-store.ts'
+	import { useJellyfinStore } from '$lib/stores/jellyfin.svelte.ts'
 	import type { PageData } from './$types.ts'
 
 	interface Props {
@@ -14,6 +16,8 @@
 	}
 
 	const { name, sortOptions, store }: Props = $props()
+	const jellyfin = useJellyfinStore()
+	const dialogs = useDialogsStore()
 
 	const searchHandler = debounce((e: InputEvent) => {
 		const term = (e.target as HTMLInputElement).value
@@ -26,6 +30,16 @@
 
 	const generalMenuItems = () => {
 		const menuItems = [
+			{
+				label: jellyfin.isLoggedIn ? (jellyfin.username ?? 'Jellyfin') : m.jellyfinLogin(),
+				action: () => {
+					if (jellyfin.isLoggedIn) {
+						dialogs.jellyfinInfoDialogOpen = true
+					} else {
+						dialogs.jellyfinLoginDialogOpen = true
+					}
+				},
+			},
 			{
 				label: m.settings(),
 				action: () => {
@@ -41,7 +55,7 @@
 			{
 				label: m.foundAnIssue(),
 				action: () => {
-					navigateToExternal('https://github.com/minht11/local-music-pwa/issues/new')
+					navigateToExternal('https://github.com/Cat-Ling/serafin-pwa/issues/new')
 				},
 			},
 		]

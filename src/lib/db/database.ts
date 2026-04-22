@@ -113,7 +113,7 @@ const createStore = <DBTypes extends DBSchema | unknown, Name extends StoreNames
 	})
 
 const openAppDatabase = () =>
-	openDB<AppDB>('snae-app-data', 3, {
+	openDB<AppDB>('serafin-app-data', 5, {
 		async upgrade(db, oldVersion, _newVersion, tx) {
 			const { objectStoreNames } = db
 
@@ -172,13 +172,21 @@ const openAppDatabase = () =>
 			if (!objectStoreNames.contains('albums')) {
 				const store = createStore(db, 'albums')
 
-				createIndexes(store, ['name', 'uuid'], { unique: true })
-				createIndexes(store, ['year'])
+				createIndexes(store, ['uuid'], { unique: true })
+				createIndexes(store, ['name', 'year'])
 
 				store.createIndex('artists', 'artists', {
 					unique: false,
 					multiEntry: true,
 				})
+			}
+
+			if (oldVersion < 4 && objectStoreNames.contains('albums')) {
+				const albumsStore = tx.objectStore('albums')
+				if (albumsStore.indexNames.contains('name')) {
+					albumsStore.deleteIndex('name')
+				}
+				albumsStore.createIndex('name', 'name', { unique: false })
 			}
 
 			if (!objectStoreNames.contains('artists')) {

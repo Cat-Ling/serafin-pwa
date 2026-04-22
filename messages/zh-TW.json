@@ -1,19 +1,17 @@
 {
 	"$schema": "https://inlang.com/schema/inlang-message-format",
-
 	"about": "關於",
 	"aboutHomepage": "首頁",
-	"aboutJoinDiscord": "加入我們的 Discord",
+	"aboutCredits": "Credits",
+	"aboutOriginalCreator": "Original creator",
+	"aboutBasedOn": "Based on {name}",
 	"aboutPrivacy": "隱私",
 	"aboutSourceCode": "原始碼",
-
 	"album": "專輯",
 	"albums": "專輯",
-
-	"appName": "Snae 播放器",
-	"appNameShort": "Snae",
+	"appName": "Serafin 播放器",
+	"appNameShort": "Serafin",
 	"appUpdateAvailable": "應用程式有可用更新",
-
 	"artist": "藝術家",
 	"artists": "藝術家",
 	"cancel": "取消",
@@ -36,13 +34,22 @@
 	"equalizerReset": "重設",
 	"equalizerStatusEnabled": "已啟用",
 	"equalizerTitle": "等化器",
-
 	"errorPageDoesNotExist": "看起來此頁面不存在。",
 	"errorUnexpected": "發生了一個意外錯誤。",
 	"favorites": "收藏夾",
 	"foundAnIssue": "發現問題？",
 	"goBack": "返回",
 	"goHome": "回到首頁",
+	"jellyfinLogin": "Jellyfin Login",
+	"jellyfinLogout": "Jellyfin Logout",
+	"jellyfinSettings": "Jellyfin Settings",
+	"jellyfinTranscode": "Transcode Audio",
+	"jellyfinTranscodeBitrate": "Transcode Bitrate",
+	"jellyfinContentView": "Content View",
+	"jellyfinGridColumns": "Grid Columns",
+	"jellyfinShowTextOnGrid": "Show Text on Grid",
+	"jellyfinShuffleLimit": "Shuffle Item Limit",
+	"jellyfinHideDuplicateArtists": "Hide Song Artists if Same as Album",
 	"library": "媒體庫",
 	"libraryAddToPlaylist": "新增到播放列表",
 	"libraryApplicationMenu": "應用程式選單",
@@ -54,7 +61,6 @@
 	"libraryDirPromptBrowserPermission": "需要瀏覽器權限",
 	"libraryDirPromptExplanation": "要播放音樂，應用程式需要存取這些目錄的權限：",
 	"libraryDirPromptGrant": "授權",
-
 	"libraryEditPlaylist": "編輯播放列表",
 	"libraryEditPlaylistName": "編輯播放列表名稱",
 	"libraryEmpty": "您的媒體庫是空的",
@@ -62,7 +68,6 @@
 	"libraryItemRemovedFromLibrary": "項目已從媒體庫中移除",
 	"libraryItemsRemovedFromLibrary": "項目已從媒體庫中移除",
 	"libraryNewPlaylist": "新播放列表",
-
 	"libraryNoResults": "未找到結果",
 	"libraryNoResultsExplanation": "嘗試搜尋其他內容",
 	"libraryOpenApplicationMenu": "開啟應用程式選單",
@@ -76,7 +81,6 @@
 	"libraryRemove": "移除",
 	"libraryRemoveFromLibrary": "從媒體庫中移除",
 	"librarySave": "儲存",
-
 	"librarySearch": "搜尋",
 	"librarySelectSomethingToBeShown": "從列表中選擇要在此處顯示的內容",
 	"librarySplitViewDisable": "停用分屏檢視佈局",
@@ -84,7 +88,6 @@
 	"libraryStartByAdding": "首先新增一些音樂",
 	"libraryToggleSortOrder": "切換排序方式",
 	"libraryTrackRemovedFromPlaylist": "曲目已從播放列表中移除",
-
 	"libraryTrackRemoveFromPlaylist": "從播放列表中移除",
 	"libraryTracksCount": "{count} 首曲目",
 	"libraryViewDetails": "檢視詳細資訊",
@@ -94,7 +97,6 @@
 	"noItemsToDisplay": "沒有要顯示的項目",
 	"pause": "暫停",
 	"play": "播放",
-
 	"player": "播放器",
 	"playerAddToQueue": "新增到佇列",
 	"playerAudioErrorLoadError": "無法載入\"{name}\"的音訊",
@@ -128,16 +130,15 @@
 	"reload": "重新載入",
 	"replace": "取代",
 	"replaceDirectoryExplanation": "您要新增的目錄 {newDir} 是 {existingDirs} 的父目錄，而 {existingDirs} 已經存在於您的媒體庫中。\n 對您媒體庫中現有的曲目不會進行任何變更。",
-
 	"replaceDirectoryQ": "取代目錄？",
 	"selectAll": "全選",
 	"selectedCount": "已選取 {count}",
 	"settingPickColorFromArtwork": "自動從目前播放歌曲的專輯封面中選取顏色",
 	"settings": "設定",
 	"settingsAbout": "關於",
-
+	"settingsAudio": "Audio",
+	"settingsInterface": "Interface",
 	"settingsAddDirectory": "新增目錄",
-
 	"settingsAllDataLocal": "所有資料都保存在您的裝置上",
 	"settingsAppearance": "外觀",
 	"settingsApplicationTheme": "應用程式主題",
@@ -180,12 +181,10 @@
 	"settingsThemeLight": "淺色",
 	"settingsTracksInAppStorageTooltip": "這包含儲存在應用程式儲存空間中的曲目和/或您從 Snae Player v1 遷移的資料",
 	"settingsTracksInsideAppMemory": "應用程式儲存空間中的曲目",
-
 	"shuffle": "隨機播放",
 	"successfullyRemovedTracks": "成功移除 {count} 首曲目",
 	"track": "曲目",
 	"trackAddToFavorites": "新增到收藏夾",
-
 	"trackPlay": "播放 {name}",
 	"trackRemoveFromFavorites": "從收藏夾中移除",
 	"tracks": "曲目",
@@ -195,7 +194,6 @@
 	"unknown": "未知",
 	"validationMaxLength": "最多允許 {max} 個字元",
 	"validationMinLength": "至少需要 {min} 個字元",
-
 	"validationRequired": "必填欄位",
 	"year": "年份"
 }

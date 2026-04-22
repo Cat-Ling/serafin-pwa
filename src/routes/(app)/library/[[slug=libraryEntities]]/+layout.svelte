@@ -17,6 +17,7 @@
 	import { useSetOverlaySnippet } from '$lib/layout-bottom-bar.svelte.ts'
 	import { FAVORITE_PLAYLIST_ID } from '$lib/library/playlists-actions.ts'
 	import { getPlaylistMenuItems } from '$lib/menu-actions/playlists.ts'
+	import { useJellyfinStore } from '$lib/stores/jellyfin.svelte.ts'
 	import Search from './Search.svelte'
 
 	const { data, children } = $props()
@@ -28,6 +29,7 @@
 
 	const main = useMainStore()
 	const dialogs = useDialogsStore()
+	const jellyfin = useJellyfinStore()
 
 	const itemsIds = $derived(data.itemsIdsQuery.value)
 	const slug = $derived(data.slug)
@@ -153,7 +155,7 @@
 					</div>
 				{/if}
 
-				{#if data.tracksCountQuery.value === 0 && slug !== 'playlists'}
+				{#if data.tracksCountQuery.value === 0 && slug !== 'playlists' && !jellyfin.isLoggedIn}
 					<div class="my-auto flex flex-col items-center text-center">
 						<div class="mb-1 text-title-lg">{m.libraryEmpty()}</div>
 						{m.libraryStartByAdding()}

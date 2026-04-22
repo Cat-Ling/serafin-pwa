@@ -1,19 +1,17 @@
 {
 	"$schema": "https://inlang.com/schema/inlang-message-format",
-
 	"about": "Über",
 	"aboutHomepage": "Webseite",
-	"aboutJoinDiscord": "Discord",
+	"aboutCredits": "Credits",
+	"aboutOriginalCreator": "Original creator",
+	"aboutBasedOn": "Based on {name}",
 	"aboutPrivacy": "Privatsphäre",
 	"aboutSourceCode": "Quellcode",
-
 	"album": "Album",
 	"albums": "Alben",
-
-	"appName": "Snae Player",
-	"appNameShort": "Snae",
+	"appName": "Serafin Player",
+	"appNameShort": "Serafin",
 	"appUpdateAvailable": "Neue Version verfügbar",
-
 	"artist": "Künstler",
 	"artists": "Künstler",
 	"cancel": "Abbrechen",
@@ -36,13 +34,22 @@
 	"equalizerReset": "Zurücksetzen",
 	"equalizerStatusEnabled": "Aktiviert",
 	"equalizerTitle": "Equalizer",
-
 	"errorPageDoesNotExist": "Diese Seite scheint nicht zu existieren.",
 	"errorUnexpected": "Es ist ein unerwarteter Fehler aufgetreten.",
 	"favorites": "Favoriten",
 	"foundAnIssue": "Haben Sie einen Fehler entdeckt?",
 	"goBack": "Zurück",
 	"goHome": "Zur Startseite",
+	"jellyfinLogin": "Jellyfin Login",
+	"jellyfinLogout": "Jellyfin Logout",
+	"jellyfinSettings": "Jellyfin Settings",
+	"jellyfinTranscode": "Transcode Audio",
+	"jellyfinTranscodeBitrate": "Transcode Bitrate",
+	"jellyfinContentView": "Content View",
+	"jellyfinGridColumns": "Grid Columns",
+	"jellyfinShowTextOnGrid": "Show Text on Grid",
+	"jellyfinShuffleLimit": "Shuffle Item Limit",
+	"jellyfinHideDuplicateArtists": "Hide Song Artists if Same as Album",
 	"library": "Bibliothek",
 	"libraryAddToPlaylist": "Zur Wiedergabeliste hinzufügen",
 	"libraryApplicationMenu": "App-Menü",
@@ -54,7 +61,6 @@
 	"libraryDirPromptBrowserPermission": "Browserberechtigung erforderlich",
 	"libraryDirPromptExplanation": "Zum Abspielen von Musik benötigt die App Zugriff auf folgende Verzeichnisse:",
 	"libraryDirPromptGrant": "Zulassen",
-
 	"libraryEditPlaylist": "Wiedergabeliste bearbeiten",
 	"libraryEditPlaylistName": "Wiedergabelistenname bearbeiten",
 	"libraryEmpty": "Ihre Bibliothek ist leer",
@@ -62,7 +68,6 @@
 	"libraryItemRemovedFromLibrary": "Element aus der Bibliothek entfernt",
 	"libraryItemsRemovedFromLibrary": "Elemente aus der Bibliothek entfernt",
 	"libraryNewPlaylist": "Neue Wiedergabeliste",
-
 	"libraryNoResults": "Keine Ergebnisse gefunden",
 	"libraryNoResultsExplanation": "Versuchen Sie es mit einer anderen Suche",
 	"libraryOpenApplicationMenu": "Verwaltung",
@@ -76,7 +81,6 @@
 	"libraryRemove": "Entfernen",
 	"libraryRemoveFromLibrary": "Aus der Bibliothek entfernen",
 	"librarySave": "Speichern",
-
 	"librarySearch": "Suchen",
 	"librarySelectSomethingToBeShown": "Bitte wählen Sie einen Listeneintrag aus, der hier angezeigt werden soll",
 	"librarySplitViewDisable": "Geteilte Ansicht deaktivieren",
@@ -84,7 +88,6 @@
 	"libraryStartByAdding": "Fügen Sie jetzt Musik hinzu",
 	"libraryToggleSortOrder": "Sortierreihenfolge ändern",
 	"libraryTrackRemovedFromPlaylist": "Titel aus der Wiedergabeliste entfernt",
-
 	"libraryTrackRemoveFromPlaylist": "Aus Playlist entfernen",
 	"libraryTracksCount": "{count} Titel",
 	"libraryViewDetails": "Details anzeigen",
@@ -94,7 +97,6 @@
 	"noItemsToDisplay": "Keine Elemente vorhanden",
 	"pause": "Pause",
 	"play": "Abspielen",
-
 	"player": "Player",
 	"playerAddToQueue": "Zur Warteschlange hinzufügen",
 	"playerAudioErrorLoadError": "Audio für \"{name}\" konnte nicht geladen werden",
@@ -128,16 +130,15 @@
 	"reload": "Aktualisieren",
 	"replace": "Ersetzen",
 	"replaceDirectoryExplanation": "{newDir} ist ein übergeordnetes Verzeichnis von {existingDirs} und bereits in Ihrer Bibliothek enthalten.\n Bestehende Titel in Ihrer Bibliothek bleiben unverändert.",
-
 	"replaceDirectoryQ": "Ordner ersetzen?",
 	"selectAll": "Alle auswählen",
 	"selectedCount": "{count} ausgewählt",
 	"settingPickColorFromArtwork": "Farbanpassung basierend auf dem aktuellen Titel",
 	"settings": "Einstellungen",
 	"settingsAbout": "Über",
-
+	"settingsAudio": "Audio",
+	"settingsInterface": "Interface",
 	"settingsAddDirectory": "Ordner hinzufügen",
-
 	"settingsAllDataLocal": "Alle Daten bleiben lokal auf Ihrem Gerät",
 	"settingsAppearance": "Oberflächendesign",
 	"settingsApplicationTheme": "Erscheinungsbild",
@@ -184,7 +185,6 @@
 	"successfullyRemovedTracks": "{count} Titel erfolgreich entfernt",
 	"track": "Titel",
 	"trackAddToFavorites": "Zu Favoriten hinzufügen",
-
 	"trackPlay": "{name} abspielen",
 	"trackRemoveFromFavorites": "Aus den Favoriten entfernen",
 	"tracks": "Titel",
@@ -194,7 +194,6 @@
 	"unknown": "Unbekannt",
 	"validationMaxLength": "Es sind maximal {max} Zeichen erlaubt",
 	"validationMinLength": "Es sind mindestens {min} Zeichen erforderlich",
-
 	"validationRequired": "Eingabe erforderlich",
 	"year": "Jahr"
 }

@@ -1,5 +1,5 @@
 {
-	"name": "local-music-pwa-next",
+	"name": "serafin-pwa",
 	"version": "0.0.1",
 	"private": true,
 	"type": "module",
@@ -8,6 +8,7 @@
 		"prepare": "svelte-kit sync",
 		"dev": "vite dev",
 		"build": "vite build",
+		"start": "node server.js",
 		"preview": "vite preview",
 		"type-check": "svelte-kit sync && svelte-check",
 		"i18n-check": "node scripts/check-translations.ts",
@@ -23,6 +24,7 @@
 	"devDependencies": {
 		"@biomejs/biome": "2.4.10",
 		"@inlang/paraglide-js": "2.15.1",
+		"@sveltejs/adapter-node": "^5.5.4",
 		"@sveltejs/adapter-static": "^3.0.10",
 		"@sveltejs/kit": "^2.56.1",
 		"@sveltejs/vite-plugin-svelte": "7.0.0",

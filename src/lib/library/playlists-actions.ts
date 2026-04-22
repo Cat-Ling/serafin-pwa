@@ -312,10 +312,20 @@ export const toggleFavoriteTrack = async (
 	trackId: number,
 ): Promise<boolean> => {
 	try {
+		const { isJellyfinId, toggleJellyfinFavorite } = await import('./jellyfin-adapter.ts')
+		const { getLibraryValue } = await import('./get/value.ts')
+
 		if (shouldBeRemoved) {
 			await dbRemoveTrackFromFavorites(trackId)
 		} else {
 			await dbAddTrackToFavorites(trackId)
+		}
+
+		if (isJellyfinId(trackId)) {
+			const track = await getLibraryValue('tracks', trackId)
+			if (track?.uuid) {
+				void toggleJellyfinFavorite(track.uuid, !shouldBeRemoved)
+			}
 		}
 
 		return true

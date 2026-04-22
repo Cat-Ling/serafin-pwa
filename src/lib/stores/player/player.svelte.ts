@@ -7,6 +7,7 @@ import { formatArtists, truncate } from '$lib/helpers/utils/text.ts'
 import { throttle } from '$lib/helpers/utils/throttle.ts'
 import { createTrackQuery, type TrackData } from '$lib/library/get/value-queries.ts'
 import { dbAddToPlayHistory } from '$lib/library/play-history-actions.ts'
+import { getJellyfinAudioUrl, reportJellyfinPlayback } from '$lib/library/jellyfin-adapter.ts'
 import { AudioLoader } from './audio-loader.svelte.ts'
 import { EqualizerStore } from './equalizer.svelte.ts'
 import { type PlayTrackOptions, QueueStore } from './queue.svelte.ts'
@@ -21,7 +22,11 @@ export const PLAYER_PLAYBACK_RATE_MAX = 2
 export class PlayerStore {
 	readonly #main = useMainStore()
 
-	readonly #audio = new Audio()
+	readonly #audio = (() => {
+		const audio = new Audio()
+		audio.crossOrigin = 'anonymous'
+		return audio
+	})()
 	readonly #audioLoader = new AudioLoader((src) => {
 		this.#audio.src = src ?? ''
 	})
@@ -72,7 +77,7 @@ export class PlayerStore {
 
 	activeTrack: TrackData | undefined = $derived(this.#activeTrackQuery.value)
 
-	#artwork = createManagedArtwork(() => this.activeTrack?.image?.full)
+	#artwork = createManagedArtwork(() => this.activeTrack?.image?.full, () => this.activeTrack?.uuid)
 	artworkSrc: string | undefined = $derived.by(this.#artwork)
 
 	constructor() {
@@ -85,10 +90,30 @@ export class PlayerStore {
 
 		// Plain (non-$state) so reads inside the effect don't create subscriptions.
 		let prevTrackId: number | null = null
+		let prevJellyfinUuid: string | null = null
+		let progressInterval: ReturnType<typeof setInterval> | null = null
+
+		const getJellyfinRepeatMode = () => {
+			const map: Record<PlayerRepeat, string> = {
+				none: 'RepeatNone',
+				all: 'RepeatAll',
+				one: 'RepeatOne',
+			}
+			return map[this.repeat]
+		}
 
 		// Debounced to recover from transient undefined during a DB refresh.
 		const scheduleAudioReset = debounce(() => {
 			if (!this.activeTrack) {
+				if (prevJellyfinUuid) {
+					void reportJellyfinPlayback('stop', prevJellyfinUuid, {
+						positionTicks: Math.round(this.currentTime * 10000000),
+						isMuted: this.muted,
+						volumeLevel: this.volume,
+						repeatMode: getJellyfinRepeatMode(),
+					})
+					prevJellyfinUuid = null
+				}
 				this.#audioLoader.reset()
 				this.currentTime = 0
 				this.duration = 0
@@ -111,6 +136,17 @@ export class PlayerStore {
 				return
 			}
 
+			// If previous track was Jellyfin, report stop
+			if (prevJellyfinUuid && track.uuid !== prevJellyfinUuid) {
+				void reportJellyfinPlayback('stop', prevJellyfinUuid, {
+					positionTicks: Math.round(this.currentTime * 10000000),
+					isMuted: this.muted,
+					volumeLevel: this.volume,
+					repeatMode: getJellyfinRepeatMode(),
+				})
+				prevJellyfinUuid = null
+			}
+
 			scheduleAudioReset.cancel()
 
 			if (prevTrackId !== null) {
@@ -121,7 +157,20 @@ export class PlayerStore {
 			this.currentTime = 0
 			this.duration = 0
 
-			void this.#audioLoader.load(track.directory, track.file).then((result) => {
+			const loadAudio = () => {
+				if (track.directory === -1) {
+					prevJellyfinUuid = track.uuid as string
+					void reportJellyfinPlayback('start', track.uuid as string, {
+						isMuted: this.muted,
+						volumeLevel: this.volume,
+						repeatMode: getJellyfinRepeatMode(),
+					})
+					return this.#audioLoader.loadUrl(getJellyfinAudioUrl(track.uuid as string))
+				}
+				return this.#audioLoader.load(track.directory, track.file)
+			}
+
+			void loadAudio().then((result) => {
 				if (result.status === 'failed') {
 					const name = truncate(track.name, 30)
 					const errorMap = {
@@ -158,6 +207,33 @@ export class PlayerStore {
 
 			const shouldPlay = this.playing
 
+			if (prevJellyfinUuid) {
+				void reportJellyfinPlayback('progress', prevJellyfinUuid, {
+					positionTicks: Math.round(this.currentTime * 10000000),
+					isPaused: !shouldPlay,
+					isMuted: this.muted,
+					volumeLevel: this.volume,
+					repeatMode: getJellyfinRepeatMode(),
+				})
+
+				if (shouldPlay && !progressInterval) {
+					progressInterval = setInterval(() => {
+						if (prevJellyfinUuid) {
+							void reportJellyfinPlayback('progress', prevJellyfinUuid, {
+								positionTicks: Math.round(this.currentTime * 10000000),
+								isPaused: !this.playing,
+								isMuted: this.muted,
+								volumeLevel: this.volume,
+								repeatMode: getJellyfinRepeatMode(),
+							})
+						}
+					}, 30000)
+				} else if (!shouldPlay && progressInterval) {
+					clearInterval(progressInterval)
+					progressInterval = null
+				}
+			}
+
 			if (audio.paused === !shouldPlay) {
 				return
 			}
@@ -178,6 +254,18 @@ export class PlayerStore {
 
 		audio.onplay = syncPlayingFromAudio
 		audio.onpause = syncPlayingFromAudio
+
+		audio.onerror = (e) => {
+			console.error('Audio element error:', audio.error)
+			const errorMap: Record<number, string> = {
+				1: 'MEDIA_ERR_ABORTED',
+				2: 'MEDIA_ERR_NETWORK',
+				3: 'MEDIA_ERR_DECODE',
+				4: 'MEDIA_ERR_SRC_NOT_SUPPORTED',
+			}
+			const errorName = audio.error ? errorMap[audio.error.code] || 'UNKNOWN' : 'UNKNOWN'
+			console.error(`Audio error details: ${errorName}`, e)
+		}
 
 		audio.onended = () => {
 			if (this.repeat === 'one') {

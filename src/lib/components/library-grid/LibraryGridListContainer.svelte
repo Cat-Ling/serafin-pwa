@@ -1,6 +1,8 @@
 <script lang="ts" module>
 	import VirtualContainer from '$lib/components/VirtualContainer.svelte'
 	import { safeInteger } from '$lib/helpers/utils/integers.ts'
+	import { isMobile } from '$lib/helpers/utils/ua.ts'
+	import { useJellyfinStore } from '$lib/stores/jellyfin.svelte.ts'
 	import LibraryGridItem, {
 		type LibraryGridItemType,
 		type LibraryItemGridItemProps,
@@ -16,14 +18,22 @@
 <script lang="ts" generics="Type extends LibraryGridItemType">
 	const { items, type, item: itemSnippet }: Props<Type> = $props()
 
+	const jellyfin = useJellyfinStore()
+
 	let containerWidth = $state(0)
 
 	const gap = 8
 
 	const sizes = $derived.by(() => {
-		const minWidth = containerWidth > 600 ? 180 : 140
+		let columns: number
+		
+		if (jellyfin.isLoggedIn) {
+			columns = isMobile() ? jellyfin.gridColumnsPortrait : jellyfin.gridColumnsLandscape
+		} else {
+			const minWidth = containerWidth > 600 ? 180 : 140
+			columns = safeInteger(Math.floor(containerWidth / minWidth), 1)
+		}
 
-		const columns = safeInteger(Math.floor(containerWidth / minWidth), 1)
 		const width = safeInteger(Math.floor((containerWidth - gap * (columns - 1)) / columns))
 
 		const height = width + 72
@@ -38,22 +48,20 @@
 </script>
 
 <VirtualContainer
-	bind:offsetWidth={containerWidth}
-	{gap}
-	count={items.length}
-	size={sizes.height}
-	lanes={sizes.columns}
-	key={(index) => `${items[index]}-${index}`}
+	{items}
+	{sizes}
+	bind:width={containerWidth}
+	padding={8}
+	class="grid-list-container"
 >
 	{#snippet children(item)}
 		<LibraryGridItem
-			itemId={items[item.index] as number}
+			itemId={item.value}
 			{type}
 			style="
-				left: {item.lane * sizes.width + item.lane * gap}px;
-				width: {sizes.width}px;
-				height: {item.size - gap}px;
-				transform: translateY({item.start}px);
+				width: {item.width}px;
+				height: {item.heightWithoutGap}px;
+				transform: translateX({item.left}px) translateY({item.top}px);
 			"
 			class="virtual-item top-0"
 		>
