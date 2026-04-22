@@ -2,13 +2,12 @@
 /// <reference types="@sveltejs/kit" />
 /// <reference types="../.generated/svelte-kit/ambient.d.ts" />
 
-import { PUBLIC_FALLBACK_PAGE } from '$env/static/public'
 import { build, files, prerendered, version } from '$service-worker'
 
 declare const self: ServiceWorkerGlobalScope
 
 const CACHE = `cache-${version}`
-const ASSETS = [...build, ...files, ...prerendered, PUBLIC_FALLBACK_PAGE]
+const ASSETS = [...build, ...files, ...prerendered]
 
 self.addEventListener('install', (event) => {
 	// Create a new cache and add all files to it
@@ -75,16 +74,6 @@ self.addEventListener('fetch', (event) => {
 
 			return response
 		} catch (error) {
-			if (isNavigationRequest) {
-				const fallbackResponse = await cache.match(PUBLIC_FALLBACK_PAGE)
-
-				if (fallbackResponse) {
-					console.info('Serving fallback page')
-
-					return fallbackResponse
-				}
-			}
-
 			throw error
 		}
 	}
