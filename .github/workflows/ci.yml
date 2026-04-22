@@ -6,9 +6,6 @@ on:
     branches:
       - main
 
-env:
-  PUBLIC_FALLBACK_PAGE: /200.html
-
 jobs:
   code-quality:
     runs-on: ubuntu-latest
