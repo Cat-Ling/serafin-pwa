@@ -144,9 +144,13 @@
 		class="bottom-bar-container fixed right-0 bottom-0 left-0 z-50 flex flex-col justify-end pointer-events-none"
 	>
 		<div class="pointer-events-auto">
-			{#each overlaySnippets.get() as snippet}
+			{#each overlaySnippets.abovePlayer as snippet}
 				{@render snippet()}
 			{/each}
+			
+			{#if overlaySnippets.bottomBar}
+				{@render overlaySnippets.bottomBar()}
+			{/if}
 		</div>
 	</div>
 
